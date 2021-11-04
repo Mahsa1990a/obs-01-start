@@ -26,12 +26,24 @@ export class HomeComponent implements OnInit, OnDestroy {
         // observer.error() //error => to throw an err
         // observer.complete() //complete => completion of observable
         observer.next(count); //next => to emit a new value
+        if (count === 2) {
+          observer.complete(); //hold till here
+        }
+        if (count > 3) { //handling err
+          observer.error(new Error('Count is greater 3'));
+        }
         count ++;
       }, 1000);
     });
     // now subscribe to our custom observable:
     this.firstObservableSubscription = customIntervalObservable.subscribe(data => {
       console.log("DATA => ", data)
+    }, error => { //react to err
+      console.log("ERROR => ", error);
+      alert(error.message)
+    }, () => { //react to completion(completing does not pass any argument)
+      console.log("Completed!");
+
     })
   }
 
