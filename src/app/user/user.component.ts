@@ -13,6 +13,8 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+    // params is Observable to which we subscribe
+    // params is stream of route parameters
     this.route.params.subscribe((params: Params) => {
       this.id = +params.id;
     });
