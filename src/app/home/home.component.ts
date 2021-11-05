@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription, Observable } from 'rxjs'; //interval is an observable
+import { map, filter } from "rxjs/operators";
 
 @Component({
   selector: 'app-home',
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         // observer.error() //error => to throw an err
         // observer.complete() //complete => completion of observable
         observer.next(count); //next => to emit a new value
-        if (count === 2) {
+        if (count === 5) {
           observer.complete(); //hold till here
         }
         if (count > 3) { //handling err
@@ -35,8 +36,14 @@ export class HomeComponent implements OnInit, OnDestroy {
         count ++;
       }, 1000);
     });
+
     // now subscribe to our custom observable:
-    this.firstObservableSubscription = customIntervalObservable.subscribe(data => {
+    // this.firstObservableSubscription = customIntervalObservable.subscribe(data => { UPDATE with adding operator:
+    this.firstObservableSubscription = customIntervalObservable.pipe(filter((data) => {
+      return data > 0;
+    }), map((data: number) => {
+      return 'Round ' + (data + 1 );
+    })).subscribe(data => {
       console.log("DATA => ", data)
     }, error => { //react to err
       console.log("ERROR => ", error);
